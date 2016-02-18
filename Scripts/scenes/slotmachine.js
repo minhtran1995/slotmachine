@@ -27,7 +27,7 @@ var scenes;
             //extra feature
             SlotMachine.cheat = false;
             this._fruits = ["", "Blank", "Grapes", "Banana", "Orange", "Cherry", "Bar", "Bell", "Seven"];
-            this._counter = 0;
+            SlotMachine._counter = 1000;
             //play BMG 
             createjs.Sound.stop();
             createjs.Sound.play("BMG", 0, 0, 0, -1, 0.5);
@@ -135,12 +135,15 @@ var scenes;
         SlotMachine.prototype.update = function () {
             //shufflein 5 secconds
             //60FPS 
-            /*
-            if (this._counter < 300) {
+            if (SlotMachine._counter < 300) {
                 this.shuffleImages();
-                this._counter++;
-                console.log(this._counter);
-            }*/
+                SlotMachine._counter++;
+                console.log(SlotMachine._counter);
+            }
+            if (SlotMachine._counter == 300) {
+                this.afterAnimation();
+                SlotMachine._counter = 1000;
+            }
         };
         //EVENT HANDLERS ++++++++++++++++++++
         /* Utility function to reset all fruit tallies */
@@ -288,25 +291,9 @@ var scenes;
                     });
                 }
                 else if (this._playerBet <= this._playerMoney) {
-                    console.log("Spinnn !");
-                    //play spin sound
-                    this.playSpinSound();
-                    this._spinResult = this.Reels();
-                    console.log(this._spinResult);
-                    this.determineWinnings();
-                    //add the 3 new images based on result
-                    this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
-                    this._firstWindow.x = this._w1x;
-                    this._firstWindow.y = this._w1y;
-                    this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
-                    this._secondWindow.x = this._w2x;
-                    this._secondWindow.y = this._w2y;
-                    this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
-                    this._thirdWindow.x = this._w3x;
-                    this._thirdWindow.y = this._w3y;
-                    this.addChild(this._firstWindow);
-                    this.addChild(this._secondWindow);
-                    this.addChild(this._thirdWindow);
+                    //this will start the animation
+                    //after the animation, the result will be affected
+                    SlotMachine._counter = 0;
                 }
             }
             else if (this._playerMoney == 0) {
@@ -331,6 +318,27 @@ var scenes;
                     }
                 });
             }
+        };
+        SlotMachine.prototype.afterAnimation = function () {
+            console.log("Spinnn !");
+            //play spin sound
+            this.playSpinSound();
+            this._spinResult = this.Reels();
+            console.log(this._spinResult);
+            this.determineWinnings();
+            //add the 3 new images based on result
+            this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         };
         /* Utility function to check if a value falls within a range of bounds */
         SlotMachine.prototype.checkRange = function (value, lowerBounds, upperBounds) {

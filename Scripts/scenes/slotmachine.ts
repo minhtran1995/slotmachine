@@ -55,7 +55,7 @@ module scenes {
         //Extra feature
         public static cheat: boolean;
         private _fruits;
-        private _counter: number;
+        private static _counter: number;
         // CONSTRUCTOR ++++++++++++++++++++++
         constructor() {
             super();
@@ -68,7 +68,7 @@ module scenes {
             //extra feature
             SlotMachine.cheat = false;
             this._fruits = ["", "Blank", "Grapes", "Banana", "Orange", "Cherry", "Bar", "Bell", "Seven"];
-            this._counter = 0;
+            SlotMachine._counter = 1000;
             //play BMG 
             createjs.Sound.stop();
             createjs.Sound.play("BMG", 0, 0, 0, -1, 0.5);
@@ -281,13 +281,16 @@ module scenes {
 
             //shufflein 5 secconds
             //60FPS 
-            /*
-            if (this._counter < 300) {
+            if (SlotMachine._counter < 300) {
                 this.shuffleImages();
-                this._counter++;
-                console.log(this._counter);
-            }*/
-            
+                SlotMachine._counter++;
+                console.log(SlotMachine._counter);
+            }
+            if (SlotMachine._counter == 300) {
+                this.afterAnimation();
+                SlotMachine._counter = 1000;
+            }
+
 
 
         }
@@ -411,13 +414,12 @@ module scenes {
                 this.showLossMessage();
             }
         }
-        
+
         public _spinButtonClick(): void {
+
             this.removeChild(this._firstWindow);
             this.removeChild(this._secondWindow);
             this.removeChild(this._thirdWindow);
-
-
 
             //Initially, there is no money, so player should not be able to spin the Reels
             if (this._playerMoney > 0) {
@@ -444,28 +446,9 @@ module scenes {
                         confirmButtonText: "Okay !"
                     });
                 } else if (this._playerBet <= this._playerMoney) {
-                    console.log("Spinnn !")
-
-                    //play spin sound
-                    this.playSpinSound();
-
-                    this._spinResult = this.Reels();
-                    console.log(this._spinResult);
-                    this.determineWinnings();
-
-                    //add the 3 new images based on result
-                    this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
-                    this._firstWindow.x = this._w1x;
-                    this._firstWindow.y = this._w1y;
-                    this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
-                    this._secondWindow.x = this._w2x;
-                    this._secondWindow.y = this._w2y;
-                    this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
-                    this._thirdWindow.x = this._w3x;
-                    this._thirdWindow.y = this._w3y;
-                    this.addChild(this._firstWindow);
-                    this.addChild(this._secondWindow);
-                    this.addChild(this._thirdWindow);
+                    //this will start the animation
+                    //after the animation, the result will be affected
+                    SlotMachine._counter = 0;
                 }
             } else if (this._playerMoney == 0) {
                 //Reset the game
@@ -489,10 +472,33 @@ module scenes {
                             console.log("Do nothing !")
                         }
                     });
-
             }
 
+        }
 
+        public afterAnimation(): void {
+            console.log("Spinnn !")
+
+            //play spin sound
+            this.playSpinSound();
+
+            this._spinResult = this.Reels();
+            console.log(this._spinResult);
+            this.determineWinnings();
+
+            //add the 3 new images based on result
+            this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         }
 
 
