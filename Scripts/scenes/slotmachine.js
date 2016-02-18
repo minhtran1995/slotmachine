@@ -24,7 +24,13 @@ var scenes;
         // PUBLIC METHODS +++++++++++++++++++++
         // Start Method
         SlotMachine.prototype.start = function () {
+            //extra feature
             SlotMachine.cheat = false;
+            this._fruits = ["", "Blank", "Grapes", "Banana", "Orange", "Cherry", "Bar", "Bell", "Seven"];
+            this._counter = 0;
+            //play BMG 
+            createjs.Sound.stop();
+            createjs.Sound.play("BMG", 0, 0, 0, -1, 0.5);
             //init result location
             this._w1x = 175;
             this._w1y = 220;
@@ -115,15 +121,26 @@ var scenes;
             stage.addChild(this);
             //Cheat
             shortcut.add("Ctrl+J", function () {
-                swal({ title: "Nice !", text: "You Have Enabled The Cheat Mode\nYou Will Always Win  \nJackpot Will Come Everytime You Win",
+                swal({
+                    title: "Nice !",
+                    text: "You Have Enabled The Cheat Mode\nYou Will Always Win  \nJackpot Will Come Everytime You Win",
                     type: "success",
-                    confirmButtonText: "K Then !" });
+                    confirmButtonText: "K Then !"
+                });
                 SlotMachine.cheat = true;
                 console.log(SlotMachine.cheat);
             });
         };
         // SLOT_MACHINE Scene updates here
         SlotMachine.prototype.update = function () {
+            //shufflein 5 secconds
+            //60FPS 
+            /*
+            if (this._counter < 300) {
+                this.shuffleImages();
+                this._counter++;
+                console.log(this._counter);
+            }*/
         };
         //EVENT HANDLERS ++++++++++++++++++++
         /* Utility function to reset all fruit tallies */
@@ -149,9 +166,17 @@ var scenes;
                 var jackPotWin = Math.floor(Math.random() * 51 + 1);
             }
             if (jackPotTry == jackPotWin) {
-                swal({ title: "Nice", text: "You Won the $" + this._jackpot + " Jackpot!!",
+                //play wining jackpot Sound
+                createjs.Sound.stop();
+                var jackpotSound = createjs.Sound.play("JackpotSound", 0, 0, 0, 0, 1);
+                //play BMG right back
+                jackpotSound.on("complete", this.playBMG, this);
+                swal({
+                    title: "Nice",
+                    text: "You Won the $" + this._jackpot + " Jackpot!!",
                     type: "success",
-                    confirmButtonText: "K Then !" });
+                    confirmButtonText: "K Then !"
+                });
                 this._playerMoney += this._jackpot;
                 this._playerMoneyLabel.text = "$" + this._playerMoney;
                 this._jackpot = 1000;
@@ -159,7 +184,15 @@ var scenes;
             }
         };
         SlotMachine.prototype.showWinMessage = function () {
+            this.playNormalWinSound();
             this._winningsLabel.text = "$" + this._winnings;
+            swal({
+                title: "Nice",
+                text: "You Won $" + this._winnings,
+                type: "success",
+                confirmButtonText: "K Then !",
+                allowOutsideClick: true
+            });
             this._playerMoney += this._winnings;
             this._playerMoneyLabel.text = "$" + this._playerMoney;
             this.resetFruitTally();
@@ -239,17 +272,25 @@ var scenes;
                     //this line will remain the same after build
                     //it will simply display a Better alert Box
                     /// <reference path="../lib/sweetalert.min.js" />
-                    swal({ title: "Error!", text: "You Should Add Some Bets To Spin The Reels !",
+                    swal({
+                        title: "Error!",
+                        text: "You Should Add Some Bets To Spin The Reels !",
                         type: "error",
-                        confirmButtonText: "K Then !" });
+                        confirmButtonText: "K Then !"
+                    });
                 }
                 else if (this._playerBet > this._playerMoney) {
-                    swal({ title: "Error!", text: "You Dont Have Enough Money To Place That Bet !",
+                    swal({
+                        title: "Error!",
+                        text: "You Dont Have Enough Money To Place That Bet !",
                         type: "error",
-                        confirmButtonText: "Okay !" });
+                        confirmButtonText: "Okay !"
+                    });
                 }
                 else if (this._playerBet <= this._playerMoney) {
                     console.log("Spinnn !");
+                    //play spin sound
+                    this.playSpinSound();
                     this._spinResult = this.Reels();
                     console.log(this._spinResult);
                     this.determineWinnings();
@@ -270,16 +311,24 @@ var scenes;
             }
             else if (this._playerMoney == 0) {
                 //Reset the game
-                swal({ title: "You Are Broke !", text: "Do You Want To Play The Game Again",
+                swal({
+                    title: "You Are Broke !",
+                    text: "Do You Want To Play The Game Again",
                     type: "info",
                     confirmButtonText: "Play Again",
                     showCancelButton: true,
-                    showConfirmButton: true }, 
+                    showConfirmButton: true
+                }, 
                 //This function is called onConfirmButton Click
-                function () {
-                    console.log("Play Again !");
-                    scene = config.Scene.SLOT_MACHINE;
-                    changeScene();
+                function (isConfirm) {
+                    if (isConfirm) {
+                        console.log("Play Again !");
+                        scene = config.Scene.SLOT_MACHINE;
+                        changeScene();
+                    }
+                    else {
+                        console.log("Do nothing !");
+                    }
                 });
             }
         };
@@ -344,12 +393,14 @@ var scenes;
         };
         //the bet after click the plus button always greater than 1, so i will eneble mouseclick 
         SlotMachine.prototype._plusButtonClick = function () {
+            this.playInsertSound();
             this._playerBet++;
             this._playerBetLabel.text = "$" + this._playerBet;
             this._minusButton.mouseEnabled = true;
         };
         //if the bet is 0, there is no way to make it lower
         SlotMachine.prototype._minusButtonClick = function () {
+            this.playInsertSound();
             if (this._playerBet > 0) {
                 this._playerBet--;
                 this._playerBetLabel.text = "$" + this._playerBet;
@@ -364,26 +415,32 @@ var scenes;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._bet1ButtonClick = function () {
+            this.playInsertSound();
             this._playerBet += 1;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._bet10ButtonClick = function () {
+            this.playInsertSound();
             this._playerBet += 10;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._bet50ButtonClick = function () {
+            this.playInsertSound();
             this._playerBet += 50;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._bet100ButtonClick = function () {
+            this.playInsertSound();
             this._playerBet += 100;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._bet500ButtonClick = function () {
+            this.playInsertSound();
             this._playerBet += 500;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._exitButtonClick = function () {
+            createjs.Sound.stop();
             scene = config.Scene.GAME_OVER;
             changeScene();
         };
@@ -391,6 +448,36 @@ var scenes;
             //I will just remove the current scene and add it back again :)
             scene = config.Scene.SLOT_MACHINE;
             changeScene();
+        };
+        SlotMachine.prototype.playInsertSound = function () {
+            var InsertCoinSound = createjs.Sound.play("InsertCoin");
+        };
+        SlotMachine.prototype.playBMG = function () {
+            var BMG = createjs.Sound.play("BMG");
+        };
+        SlotMachine.prototype.playNormalWinSound = function () {
+            var normalWin = createjs.Sound.play("NormalWin");
+        };
+        SlotMachine.prototype.playSpinSound = function () {
+            var spin = createjs.Sound.play("Spin");
+        };
+        //shuffle images
+        SlotMachine.prototype.shuffleImages = function () {
+            this.removeChild(this._firstWindow);
+            this.removeChild(this._secondWindow);
+            this.removeChild(this._thirdWindow);
+            this._firstWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         };
         return SlotMachine;
     })(objects.Scene);

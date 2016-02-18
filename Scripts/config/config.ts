@@ -5,6 +5,7 @@
         public static MENU: number = 0;
         public static SLOT_MACHINE: number = 1;
         public static GAME_OVER: number = 2;
+        public static LOADING: number = 3;
     }
     
     

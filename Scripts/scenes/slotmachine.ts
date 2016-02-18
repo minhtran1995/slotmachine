@@ -15,8 +15,8 @@ module scenes {
         private _thirdWindow: createjs.Bitmap;
         private _spinResult;
         private _jackpot: number;
-       
-        
+
+
         //bet control
         private _plusButton: objects.Button;
         private _minusButton: objects.Button;
@@ -27,10 +27,10 @@ module scenes {
         private _bet100: objects.Button;
         private _bet500: objects.Button;
         private _playerBet: number;
-        
-        
+
+
         //Fruits
-        
+
         private _grapes: number = 0;
         private _bananas: number = 0;
         private _oranges: number = 0;
@@ -39,7 +39,7 @@ module scenes {
         private _bells: number = 0;
         private _sevens: number = 0;
         private _blanks: number = 0;
-        
+
         // result location
         private _w1x: number;
         private _w1y: number;
@@ -51,42 +51,50 @@ module scenes {
         //player stuff
         private _playerMoney: number;
         private _winnings: number;
-        
+
         //Extra feature
-        public static cheat:boolean;
-       
+        public static cheat: boolean;
+        private _fruits;
+        private _counter: number;
         // CONSTRUCTOR ++++++++++++++++++++++
         constructor() {
             super();
         }
-        
+
         // PUBLIC METHODS +++++++++++++++++++++
-        
+
         // Start Method
         public start(): void {
+            //extra feature
             SlotMachine.cheat = false;
-            
+            this._fruits = ["", "Blank", "Grapes", "Banana", "Orange", "Cherry", "Bar", "Bell", "Seven"];
+            this._counter = 0;
+            //play BMG 
+            createjs.Sound.stop();
+            createjs.Sound.play("BMG", 0, 0, 0, -1, 0.5);
+
+
             //init result location
             this._w1x = 175;
             this._w1y = 220;
             this._w2x = 365;
             this._w2y = 220;
             this._w3x = 555;
-            this._w3y = 220;            
-            
-            
+            this._w3y = 220;
+
+
             //init player stuff
             this._playerMoney = 1000;
             this._playerBet = 0;
             this._winnings = 0;
-            
+
             //Jackpot
             this._jackpot = 5000;
-            
+
             //add background
             this._mainBG = new createjs.Bitmap(assets.getResult("mainBG"));
-            this.addChild(this._mainBG);   
-            
+            this.addChild(this._mainBG);
+
             //add spin button
             this._spinButton = new objects.Button(
                 "SpinButton",
@@ -96,9 +104,9 @@ module scenes {
             this._spinButton.on("click", this._spinButtonClick, this);
 
 
-            this.addChild(this._spinButton); 
-            
-            
+            this.addChild(this._spinButton);
+
+
             //add exit button
             this._exitButton = new objects.Button(
                 "ExitButton",
@@ -108,7 +116,7 @@ module scenes {
             this._exitButton.on("click", this._exitButtonClick, this);
 
             this.addChild(this._exitButton);
-            
+
             //add reset button
             this._resetButton = new objects.Button(
                 "ResetButton",
@@ -118,9 +126,9 @@ module scenes {
             this._resetButton.on("click", this._resetButtonClick, this);
 
             this.addChild(this._resetButton);
-            
+
             //add bet control +++++++++++++++++++++++++++
-            
+
             //add bet
             this._plusButton = new objects.Button(
                 "PlusButton",
@@ -128,8 +136,8 @@ module scenes {
                 51, 54);
             this._plusButton.on("click", this._plusButtonClick, this);
 
-            this.addChild(this._plusButton); 
-            
+            this.addChild(this._plusButton);
+
             //minus bet
             this._minusButton = new objects.Button(
                 "MinusButton",
@@ -138,8 +146,8 @@ module scenes {
             this._minusButton.on("click", this._minusButtonClick, this);
 
             this.addChild(this._minusButton);
-            
-            
+
+
             //$1 bet
             this._bet1 = new objects.Button(
                 "bet1",
@@ -148,7 +156,7 @@ module scenes {
             this._bet1.on("click", this._bet1ButtonClick, this);
 
             this.addChild(this._bet1);
-            
+
             //$10 bet
             this._bet10 = new objects.Button(
                 "bet10",
@@ -157,7 +165,7 @@ module scenes {
             this._bet10.on("click", this._bet10ButtonClick, this);
 
             this.addChild(this._bet10);
-            
+
             //$50 bet
             this._bet50 = new objects.Button(
                 "bet50",
@@ -166,7 +174,7 @@ module scenes {
             this._bet50.on("click", this._bet50ButtonClick, this);
 
             this.addChild(this._bet50);
-            
+
             //$100 bet
             this._bet100 = new objects.Button(
                 "bet100",
@@ -175,7 +183,7 @@ module scenes {
             this._bet100.on("click", this._bet100ButtonClick, this);
 
             this.addChild(this._bet100);
-            
+
             //$500 bet
             this._bet500 = new objects.Button(
                 "bet500",
@@ -184,7 +192,7 @@ module scenes {
             this._bet500.on("click", this._bet500ButtonClick, this);
 
             this.addChild(this._bet500);
-            
+
             //Clear Bet Button
             this._clearBetButton = new objects.Button(
                 "ClearBetButton",
@@ -193,9 +201,9 @@ module scenes {
             this._clearBetButton.on("click", this._clearBetButtonClick, this);
 
             this.addChild(this._clearBetButton);
-            
-            
-            
+
+
+
             //add the 3 images
             this._firstWindow = new createjs.Bitmap(assets.getResult("Blank"));
             this._firstWindow.x = this._w1x;
@@ -209,8 +217,8 @@ module scenes {
             this.addChild(this._firstWindow);
             this.addChild(this._secondWindow);
             this.addChild(this._thirdWindow);
-            
-            
+
+
             // add the Player Money Label to the scene
             this._playerMoneyLabel = new objects.Label(
                 "$" + this._playerMoney.toFixed(2),
@@ -218,8 +226,8 @@ module scenes {
                 "#976d1b",
                 115,
                 25);
-            this.addChild(this._playerMoneyLabel);          
-            
+            this.addChild(this._playerMoneyLabel);
+
             // add bet lable to the scene
             this._playerBetLabel = new objects.Label(
                 "$" + this._playerBet,
@@ -227,8 +235,8 @@ module scenes {
                 "#976d1b",
                 215,
                 config.Screen.CENTER_Y + 203);
-            this.addChild(this._playerBetLabel); 
-            
+            this.addChild(this._playerBetLabel);
+
             // add jackpot lable to the scene
             this._jackpotLabel = new objects.Label(
                 "$" + this._jackpot,
@@ -236,8 +244,8 @@ module scenes {
                 "#ff3333",
                 config.Screen.CENTER_X,
                 config.Screen.CENTER_Y - 250);
-            this.addChild(this._jackpotLabel); 
-            
+            this.addChild(this._jackpotLabel);
+
             // add winning Money lable to the scene
             this._winningsLabel = new objects.Label(
                 "$" + this._winnings,
@@ -245,36 +253,51 @@ module scenes {
                 "#976d1b",
                 config.Screen.CENTER_X - 40,
                 config.Screen.CENTER_Y + 203);
-            this.addChild(this._winningsLabel); 
-            
-            
+            this.addChild(this._winningsLabel);
+
+
             // add this scene to the global stage container
             stage.addChild(this);
-            
+
             //Cheat
-             shortcut.add("Ctrl+J",function() {
-	swal({ title: "Nice !", text: "You Have Enabled The Cheat Mode\nYou Will Always Win  \nJackpot Will Come Everytime You Win",
-                     type: "success",
-                     confirmButtonText: "K Then !" });
-                     SlotMachine.cheat=true;
-                     console.log(SlotMachine.cheat);
-             });
-             
-             
-             
+            shortcut.add("Ctrl+J", function() {
+                swal({
+                    title: "Nice !",
+                    text: "You Have Enabled The Cheat Mode\nYou Will Always Win  \nJackpot Will Come Everytime You Win",
+                    type: "success",
+                    confirmButtonText: "K Then !"
+                });
+                SlotMachine.cheat = true;
+                console.log(SlotMachine.cheat);
+            });
+
+
+
         }
 
         // SLOT_MACHINE Scene updates here
+        
         public update(): void {
 
+            //shufflein 5 secconds
+            //60FPS 
+            /*
+            if (this._counter < 300) {
+                this.shuffleImages();
+                this._counter++;
+                console.log(this._counter);
+            }*/
+            
+
+
         }
-        
-        
+
+
         //EVENT HANDLERS ++++++++++++++++++++
-        
-         
-   
-        
+
+
+
+
         /* Utility function to reset all fruit tallies */
         public resetFruitTally() {
             this._grapes = 0;
@@ -289,26 +312,33 @@ module scenes {
 
         public checkJackPot() {
             /* compare two random values */
-            
+
             console.log(SlotMachine.cheat);
-            
-            if(SlotMachine.cheat){
-            var jackPotTry = 1;
-            var jackPotWin = 1;
-        }
-        else{
-            var jackPotTry = Math.floor(Math.random() * 51 + 1);
-            var jackPotWin = Math.floor(Math.random() * 51 + 1);
-        }
-            
-            
+
+            if (SlotMachine.cheat) {
+                var jackPotTry = 1;
+                var jackPotWin = 1;
+            } else {
+                var jackPotTry = Math.floor(Math.random() * 51 + 1);
+                var jackPotWin = Math.floor(Math.random() * 51 + 1);
+            }
+
+
             if (jackPotTry == jackPotWin) {
-                
-                
-                    swal({ title: "Nice", text: "You Won the $" + this._jackpot + " Jackpot!!",
-                     type: "success",
-                     confirmButtonText: "K Then !" }); 
-                
+                //play wining jackpot Sound
+                createjs.Sound.stop();
+                var jackpotSound = createjs.Sound.play("JackpotSound", 0, 0, 0, 0, 1);
+                //play BMG right back
+                jackpotSound.on("complete", this.playBMG, this);
+
+
+                swal({
+                    title: "Nice",
+                    text: "You Won the $" + this._jackpot + " Jackpot!!",
+                    type: "success",
+                    confirmButtonText: "K Then !"
+                });
+
                 this._playerMoney += this._jackpot;
                 this._playerMoneyLabel.text = "$" + this._playerMoney;
                 this._jackpot = 1000;
@@ -316,7 +346,16 @@ module scenes {
             }
         }
         public showWinMessage(): void {
+            this.playNormalWinSound();
             this._winningsLabel.text = "$" + this._winnings;
+
+            swal({
+                title: "Nice",
+                text: "You Won $" + this._winnings,
+                type: "success",
+                confirmButtonText: "K Then !",
+                allowOutsideClick: true
+            });
             this._playerMoney += this._winnings;
             this._playerMoneyLabel.text = "$" + this._playerMoney;
             this.resetFruitTally();
@@ -334,89 +373,81 @@ module scenes {
             if (this._blanks == 0) {
                 if (this._grapes == 3) {
                     this._winnings = this._playerBet * 10;
-                }
-                else if (this._bananas == 3) {
+                } else if (this._bananas == 3) {
                     this._winnings = this._playerBet * 20;
-                }
-                else if (this._oranges == 3) {
+                } else if (this._oranges == 3) {
                     this._winnings = this._playerBet * 30;
-                }
-                else if (this._cherries == 3) {
+                } else if (this._cherries == 3) {
                     this._winnings = this._playerBet * 40;
-                }
-                else if (this._bars == 3) {
+                } else if (this._bars == 3) {
                     this._winnings = this._playerBet * 50;
-                }
-                else if (this._bells == 3) {
+                } else if (this._bells == 3) {
                     this._winnings = this._playerBet * 75;
-                }
-                else if (this._sevens == 3) {
+                } else if (this._sevens == 3) {
                     this._winnings = this._playerBet * 100;
-                }
-                else if (this._grapes == 2) {
+                } else if (this._grapes == 2) {
                     this._winnings = this._playerBet * 2;
-                }
-                else if (this._bananas == 2) {
+                } else if (this._bananas == 2) {
                     this._winnings = this._playerBet * 2;
-                }
-                else if (this._oranges == 2) {
+                } else if (this._oranges == 2) {
                     this._winnings = this._playerBet * 3;
-                }
-                else if (this._cherries == 2) {
+                } else if (this._cherries == 2) {
                     this._winnings = this._playerBet * 4;
-                }
-                else if (this._bars == 2) {
+                } else if (this._bars == 2) {
                     this._winnings = this._playerBet * 5;
-                }
-                else if (this._bells == 2) {
+                } else if (this._bells == 2) {
                     this._winnings = this._playerBet * 10;
-                }
-                else if (this._sevens == 2) {
+                } else if (this._sevens == 2) {
                     this._winnings = this._playerBet * 20;
-                }
-                else if (this._sevens == 1) {
+                } else if (this._sevens == 1) {
                     this._winnings = this._playerBet * 5;
-                }
-                else {
+                } else {
                     this._winnings = this._playerBet * 1;
                 }
 
                 this.showWinMessage();
-            }
-            else {
+            } else {
                 this._winnings = this._playerBet * (-1);
                 this.showLossMessage();
             }
         }
+        
         public _spinButtonClick(): void {
             this.removeChild(this._firstWindow);
             this.removeChild(this._secondWindow);
             this.removeChild(this._thirdWindow);
-            
+
+
+
             //Initially, there is no money, so player should not be able to spin the Reels
             if (this._playerMoney > 0) {
                 if (this._playerBet == 0) {
-                
+
                     //++++++++++++++++++++++++++++++++++++++++++
                     //this line will remain the same after build
                     //it will simply display a Better alert Box
                     /// <reference path="../lib/sweetalert.min.js" />
-                    
-                    
-                    swal({ title: "Error!", text: "You Should Add Some Bets To Spin The Reels !",
-                     type: "error",
-                     confirmButtonText: "K Then !" }); 
-                }
-                else if (this._playerBet > this._playerMoney) {
-                    
-                    swal({ title: "Error!", text: "You Dont Have Enough Money To Place That Bet !",
-                    type: "error",
-                    confirmButtonText: "Okay !" });
-                }
-                else if (this._playerBet <= this._playerMoney) {
+
+
+                    swal({
+                        title: "Error!",
+                        text: "You Should Add Some Bets To Spin The Reels !",
+                        type: "error",
+                        confirmButtonText: "K Then !"
+                    });
+                } else if (this._playerBet > this._playerMoney) {
+
+                    swal({
+                        title: "Error!",
+                        text: "You Dont Have Enough Money To Place That Bet !",
+                        type: "error",
+                        confirmButtonText: "Okay !"
+                    });
+                } else if (this._playerBet <= this._playerMoney) {
                     console.log("Spinnn !")
 
-
+                    //play spin sound
+                    this.playSpinSound();
 
                     this._spinResult = this.Reels();
                     console.log(this._spinResult);
@@ -436,37 +467,44 @@ module scenes {
                     this.addChild(this._secondWindow);
                     this.addChild(this._thirdWindow);
                 }
-            }
-            else if (this._playerMoney == 0) {
+            } else if (this._playerMoney == 0) {
                 //Reset the game
-                
-                   swal({ title: "You Are Broke !", text: "Do You Want To Play The Game Again",
-                   type: "info",
-                   confirmButtonText: "Play Again",
-                   showCancelButton:true,
-                   showConfirmButton:true },
-                   //This function is called onConfirmButton Click
-                   function(){ console.log("Play Again !"); 
-                   scene = config.Scene.SLOT_MACHINE;
-           changeScene();
-               }); 
+
+                swal({
+                    title: "You Are Broke !",
+                    text: "Do You Want To Play The Game Again",
+                    type: "info",
+                    confirmButtonText: "Play Again",
+                    showCancelButton: true,
+                    showConfirmButton: true
+                },
+                    //This function is called onConfirmButton Click
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            console.log("Play Again !");
+                            scene = config.Scene.SLOT_MACHINE;
+                            changeScene();
+
+                        } else {
+                            console.log("Do nothing !")
+                        }
+                    });
 
             }
 
 
         }
-        
-        
+
+
         /* Utility function to check if a value falls within a range of bounds */
         public checkRange(value, lowerBounds, upperBounds): number | boolean {
             if (value >= lowerBounds && value <= upperBounds) {
                 return value;
-            }
-            else {
+            } else {
                 return !value;
             }
         }
-        
+
         /* When this function is called it determines the betLine results.
         e.g. Bar - Orange - Banana */
         public Reels() {
@@ -474,16 +512,14 @@ module scenes {
             var outCome = [0, 0, 0];
 
             for (var spin = 0; spin < 3; spin++) {
-                if(SlotMachine.cheat)
-                {
+                if (SlotMachine.cheat) {
                     //radom from 28 => 65. That means there are no blanks
-                    outCome[spin] = (Math.floor(Math.random() * 37) + 28);  
-                }
-                else{
-                outCome[spin] = Math.floor((Math.random() * 65) + 1);
+                    outCome[spin] = (Math.floor(Math.random() * 37) + 28);
+                } else {
+                    outCome[spin] = Math.floor((Math.random() * 65) + 1);
                 }
                 switch (outCome[spin]) {
-                    case this.checkRange(outCome[spin], 1, 27):  // 41.5% probability
+                    case this.checkRange(outCome[spin], 1, 27): // 41.5% probability
                         betLine[spin] = "Blank";
                         this._blanks++;
                         break;
@@ -520,10 +556,11 @@ module scenes {
             return betLine;
         }
 
-        
+
 
         //the bet after click the plus button always greater than 1, so i will eneble mouseclick 
         public _plusButtonClick(): void {
+            this.playInsertSound();
             this._playerBet++;
             this._playerBetLabel.text = "$" + this._playerBet;
             this._minusButton.mouseEnabled = true;
@@ -531,17 +568,17 @@ module scenes {
 
         //if the bet is 0, there is no way to make it lower
         public _minusButtonClick(): void {
+            this.playInsertSound();
             if (this._playerBet > 0) {
                 this._playerBet--;
                 this._playerBetLabel.text = "$" + this._playerBet;
-            }
-            else {
+            } else {
                 this._minusButton.mouseEnabled = false;
             }
 
 
         }
-        
+
         //clear the playerBet;
         public _clearBetButtonClick(): void {
             this._playerBet = 0;
@@ -550,35 +587,81 @@ module scenes {
 
 
         public _bet1ButtonClick(): void {
+            this.playInsertSound();
             this._playerBet += 1;
             this._playerBetLabel.text = "$" + this._playerBet;
         }
         public _bet10ButtonClick(): void {
+            this.playInsertSound();
             this._playerBet += 10;
             this._playerBetLabel.text = "$" + this._playerBet;
         }
         public _bet50ButtonClick(): void {
+            this.playInsertSound();
             this._playerBet += 50;
             this._playerBetLabel.text = "$" + this._playerBet;
         }
         public _bet100ButtonClick(): void {
+            this.playInsertSound();
             this._playerBet += 100;
             this._playerBetLabel.text = "$" + this._playerBet;
         }
         public _bet500ButtonClick(): void {
+            this.playInsertSound();
             this._playerBet += 500;
             this._playerBetLabel.text = "$" + this._playerBet;
         }
 
         public _exitButtonClick(): void {
+            createjs.Sound.stop();
             scene = config.Scene.GAME_OVER;
             changeScene();
         }
 
         public _resetButtonClick(): void {
             //I will just remove the current scene and add it back again :)
+
             scene = config.Scene.SLOT_MACHINE;
             changeScene();
+        }
+
+        public playInsertSound(): void {
+            var InsertCoinSound = createjs.Sound.play("InsertCoin");
+        }
+
+        public playBMG(): void {
+            var BMG = createjs.Sound.play("BMG");
+        }
+
+        public playNormalWinSound(): void {
+            var normalWin = createjs.Sound.play("NormalWin");
+        }
+
+        public playSpinSound(): void {
+            var spin = createjs.Sound.play("Spin");
+        }
+        
+        //shuffle images
+        public shuffleImages(): void {
+            this.removeChild(this._firstWindow);
+            this.removeChild(this._secondWindow);
+            this.removeChild(this._thirdWindow);
+
+            this._firstWindow = new createjs.Bitmap(
+                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(
+                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(
+                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         }
 
     }

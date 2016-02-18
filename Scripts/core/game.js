@@ -7,6 +7,7 @@ var stats;
 var currentScene;
 var scene;
 // Game Scenes
+var loading;
 var menu;
 var slotMachine;
 var gameOver;
@@ -37,12 +38,19 @@ var assetData = [
     { id: "Cherry", src: "../../Assets/images/cherries.jpg" },
     { id: "Bar", src: "../../Assets/images/bar.jpg" },
     { id: "Bell", src: "../../Assets/images/bell.jpg" },
-    { id: "Seven", src: "../../Assets/images/seven.jpg" }
+    { id: "Seven", src: "../../Assets/images/seven.jpg" },
+    //sound
+    { id: "InsertCoin", src: "../../Assets/sounds/InsertCoins.mp3" },
+    { id: "BMG", src: "../../Assets/sounds/Feeling Happy ' Stay See Summer Mix 2015.mp3" },
+    { id: "JackpotSound", src: "../../Assets/sounds/jackpot.mp3" },
+    { id: "NormalWin", src: "../../Assets/sounds/normalWin.mp3" },
+    { id: "Spin", src: "../../Assets/sounds/spin.mp3" }
 ];
 function preload() {
+    scene = config.Scene.MENU;
     assets = new createjs.LoadQueue();
     assets.installPlugin(createjs.Sound);
-    assets.on("complete", init, this);
+    assets.on("complete", changeScene, this);
     assets.loadManifest(assetData);
 }
 function init() {
@@ -59,8 +67,9 @@ function init() {
     // sets up our stats counting workflow
     setupStats();
     // set initial scene
-    scene = config.Scene.MENU;
+    scene = config.Scene.LOADING;
     changeScene();
+    preload();
 }
 // Main Game Loop function that handles what happens each "tick" or frame
 function gameLoop(event) {
@@ -87,14 +96,20 @@ function changeScene() {
     stage.removeAllChildren();
     // Launch various scenes
     switch (scene) {
+        case config.Scene.LOADING:
+            // show the loading scene            
+            loading = new scenes.Loading();
+            currentScene = loading;
+            console.log("Starting loading Scene");
+            break;
         case config.Scene.MENU:
-            // show the MENU scene
+            // show the MENU scene            
             menu = new scenes.Menu();
             currentScene = menu;
             console.log("Starting MENU Scene");
             break;
         case config.Scene.SLOT_MACHINE:
-            // show the PLAY scene
+            // show the PLAY scene            
             slotMachine = new scenes.SlotMachine();
             currentScene = slotMachine;
             console.log("Starting SLOT_MACHINE Scene");

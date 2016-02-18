@@ -7,6 +7,7 @@ var config;
         Scene.MENU = 0;
         Scene.SLOT_MACHINE = 1;
         Scene.GAME_OVER = 2;
+        Scene.LOADING = 3;
         return Scene;
     })();
     config.Scene = Scene;
