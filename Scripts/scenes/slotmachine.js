@@ -202,6 +202,13 @@ var scenes;
             this.checkJackPot();
         };
         SlotMachine.prototype.showLossMessage = function () {
+            swal({
+                title: "Not Cool",
+                text: "You Lose Your $" + (this._winnings * -1) + " Bet !",
+                type: "error",
+                confirmButtonText: "K Then !",
+                allowOutsideClick: true
+            });
             this._winningsLabel.text = "$" + this._winnings;
             this._playerMoney -= this._playerBet;
             this._playerMoneyLabel.text = "$" + this._playerMoney;
