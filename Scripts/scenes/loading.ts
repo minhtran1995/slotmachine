@@ -19,30 +19,15 @@ module scenes {
         public start(): void {
             Loading._flag = false;
               
-            //add background
-            this._mainBG = new createjs.Bitmap("../../Assets/images/loading.jpg");
-            
-            //i tried to get height and width of a bitmap            
-            this._mainBG.regX = this._mainBG.getBounds().width * 0.5;
-            this._mainBG.regY = this._mainBG.getBounds().height * 0.5;
-
-            this._mainBG.x = config.Screen.CENTER_X;
-            this._mainBG.y = config.Screen.CENTER_Y - 150;
-            this.addChild(this._mainBG);
-
-
             //this part require a preload
             this._queue = new createjs.LoadQueue();
             this._queue.installPlugin(createjs.Sound);
             this._queue.loadManifest([
-                { id: "PreloaderImage", src: "../../Assets/images/preloader.png" }
+                { id: "PreloaderImage", src: "../../Assets/images/preloader.png" },
+                { id: "MainBG", src: "../../Assets/images/loading.jpg" },
             ]);
-            this._queue.on("complete", this.addPreloader, this);
+            this._queue.on("complete", this.addBitMaps, this);
 
-            
-            
-            
-            
                    
             //adding label
             this._lodingLable = new objects.Label("Loading",
@@ -52,8 +37,6 @@ module scenes {
                 config.Screen.CENTER_Y + 130);
             this.addChild(this._lodingLable);
             
-           
-           
             
             // add this scene to the global stage container
             stage.addChild(this);
@@ -68,7 +51,18 @@ module scenes {
         }
 
 
-        public addPreloader(): void {
+        public addBitMaps(): void {
+            //add background
+            this._mainBG = new createjs.Bitmap(this._queue.getResult("MainBG"));
+            
+            //i tried to get height and width of a bitmap            
+            this._mainBG.regX = this._mainBG.getBounds().width * 0.5;
+            this._mainBG.regY = this._mainBG.getBounds().height * 0.5;
+
+            this._mainBG.x = config.Screen.CENTER_X;
+            this._mainBG.y = config.Screen.CENTER_Y - 150;
+            this.addChild(this._mainBG);
+            
             this._preloader = new createjs.Bitmap(this._queue.getResult("PreloaderImage"));
             //i tried to get height and width of a bitmap            
             this._preloader.regX = this._preloader.getBounds().width * 0.5;
