@@ -315,6 +315,9 @@ var scenes;
                     SlotMachine._counter = 0;
                     //play spin sound
                     this.playSpinSound();
+                    //clear previous wining money
+                    this._winnings = 0;
+                    this._winningsLabel.text = "$" + this._winnings;
                 }
             }
             else if (this._playerMoney == 0) {
