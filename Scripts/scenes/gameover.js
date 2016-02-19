@@ -15,11 +15,15 @@ var scenes;
         // PUBLIC METHODS +++++++++++++++++++++
         // Start Method
         GameOver.prototype.start = function () {
-            // add the WELCOME Label to the MENU scene
-            this._gameOverLabel = new objects.Label("GAME OVER", "60px Consolas", "#000000", config.Screen.CENTER_X, config.Screen.CENTER_Y);
+            GameOver._flag = 1;
+            //add BG
+            this._overBG = new createjs.Bitmap(assets.getResult("OverBG"));
+            this.addChild(this._overBG);
+            // add the gameOver Label to the MENU scene
+            this._gameOverLabel = new objects.Label("GAME OVER", "60px Satisfy", "#e4d66b", config.Screen.CENTER_X, config.Screen.CENTER_Y - 30);
             this.addChild(this._gameOverLabel);
             // add the START button to the MENU scene
-            this._startOverButton = new objects.Button("StartButton", config.Screen.CENTER_X, config.Screen.CENTER_Y + 80, 150, 50);
+            this._startOverButton = new objects.Button("StartOverButton", config.Screen.CENTER_X, config.Screen.CENTER_Y + 80, 150, 44);
             this.addChild(this._startOverButton);
             // START Button event listener
             this._startOverButton.on("click", this._startOverButtonClick, this);
@@ -28,11 +32,23 @@ var scenes;
         };
         // INTRO Scene updates here
         GameOver.prototype.update = function () {
+            //Freetime Animation
+            if (GameOver._flag <= 180) {
+                this._startOverButton.x += 1;
+                GameOver._flag++;
+            }
+            else if (GameOver._flag > 180 && GameOver._flag < 360 + 180) {
+                this._startOverButton.x -= 1;
+                GameOver._flag++;
+            }
+            else {
+                GameOver._flag = -180;
+            }
         };
         //EVENT HANDLERS ++++++++++++++++++++
         // START Button click event handler
         GameOver.prototype._startOverButtonClick = function (event) {
-            // Switch to the LEFT_CAVE Scene
+            createjs.Sound.stop();
             scene = config.Scene.MENU;
             changeScene();
         };

@@ -106,16 +106,16 @@ var scenes;
             this.addChild(this._secondWindow);
             this.addChild(this._thirdWindow);
             // add the Player Money Label to the scene
-            this._playerMoneyLabel = new objects.Label("$" + this._playerMoney.toFixed(2), "bold 25px Arial", "#976d1b", 115, 25);
+            this._playerMoneyLabel = new objects.Label("$" + this._playerMoney.toFixed(2), "bold 25px Satisfy", "#976d1b", 115, 25);
             this.addChild(this._playerMoneyLabel);
             // add bet lable to the scene
-            this._playerBetLabel = new objects.Label("$" + this._playerBet, "bold 25px Arial", "#976d1b", 215, config.Screen.CENTER_Y + 203);
+            this._playerBetLabel = new objects.Label("$" + this._playerBet, "bold 25px Satisfy", "#976d1b", 215, config.Screen.CENTER_Y + 203);
             this.addChild(this._playerBetLabel);
             // add jackpot lable to the scene
-            this._jackpotLabel = new objects.Label("$" + this._jackpot, "bold 25px Arial", "#ff3333", config.Screen.CENTER_X, config.Screen.CENTER_Y - 250);
+            this._jackpotLabel = new objects.Label("$" + this._jackpot, "bold 25px Satisfy", "#ff3333", config.Screen.CENTER_X, config.Screen.CENTER_Y - 253);
             this.addChild(this._jackpotLabel);
             // add winning Money lable to the scene
-            this._winningsLabel = new objects.Label("$" + this._winnings, "bold 25px Arial", "#976d1b", config.Screen.CENTER_X - 40, config.Screen.CENTER_Y + 203);
+            this._winningsLabel = new objects.Label("$" + this._winnings, "bold 25px Satisfy", "#976d1b", config.Screen.CENTER_X - 40, config.Screen.CENTER_Y + 203);
             this.addChild(this._winningsLabel);
             // add this scene to the global stage container
             stage.addChild(this);
@@ -202,6 +202,7 @@ var scenes;
             this.checkJackPot();
         };
         SlotMachine.prototype.showLossMessage = function () {
+            this.playLoseSound();
             swal({
                 title: "Not Cool",
                 text: "You Lose Your $" + (this._winnings * -1) + " Bet !",
@@ -301,6 +302,8 @@ var scenes;
                     //this will start the animation
                     //after the animation, the result will be affected
                     SlotMachine._counter = 0;
+                    //play spin sound
+                    this.playSpinSound();
                 }
             }
             else if (this._playerMoney == 0) {
@@ -328,10 +331,8 @@ var scenes;
         };
         SlotMachine.prototype.afterAnimation = function () {
             console.log("Spinnn !");
-            //play spin sound
-            this.playSpinSound();
             this._spinResult = this.Reels();
-            console.log(this._spinResult);
+            //console.log(this._spinResult);
             this.determineWinnings();
             //add the 3 new images based on result
             this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
@@ -455,7 +456,6 @@ var scenes;
             this._playerBetLabel.text = "$" + this._playerBet;
         };
         SlotMachine.prototype._exitButtonClick = function () {
-            createjs.Sound.stop();
             scene = config.Scene.GAME_OVER;
             changeScene();
         };
@@ -469,12 +469,17 @@ var scenes;
         };
         SlotMachine.prototype.playBMG = function () {
             var BMG = createjs.Sound.play("BMG");
+            BMG.pan = 0;
         };
         SlotMachine.prototype.playNormalWinSound = function () {
             var normalWin = createjs.Sound.play("NormalWin");
         };
         SlotMachine.prototype.playSpinSound = function () {
             var spin = createjs.Sound.play("Spin");
+        };
+        SlotMachine.prototype.playLoseSound = function () {
+            var lose = createjs.Sound.play("Lose");
+            lose.setVolume(0.5);
         };
         //shuffle images
         SlotMachine.prototype.shuffleImages = function () {

@@ -22,11 +22,9 @@ var scenes;
             this._queue.loadManifest([
                 { id: "PreloaderImage", src: "../../Assets/images/preloader.png" },
                 { id: "MainBG", src: "../../Assets/images/loading.jpg" },
+                { id: "loadingBG", src: "../../Assets/images/loadingBG-fixed.jpg" },
             ]);
             this._queue.on("complete", this.addBitMaps, this);
-            //adding label
-            this._lodingLable = new objects.Label("Loading", "25px Arial", "#ff751a", config.Screen.CENTER_X, config.Screen.CENTER_Y + 130);
-            this.addChild(this._lodingLable);
             // add this scene to the global stage container
             stage.addChild(this);
         };
@@ -39,6 +37,8 @@ var scenes;
         };
         Loading.prototype.addBitMaps = function () {
             //add background
+            this._loadingBG = new createjs.Bitmap(this._queue.getResult("loadingBG"));
+            this.addChild(this._loadingBG);
             this._mainBG = new createjs.Bitmap(this._queue.getResult("MainBG"));
             //i tried to get height and width of a bitmap            
             this._mainBG.regX = this._mainBG.getBounds().width * 0.5;
@@ -53,6 +53,9 @@ var scenes;
             this._preloader.x = config.Screen.CENTER_X;
             this._preloader.y = config.Screen.CENTER_Y + 50;
             this.addChild(this._preloader);
+            //adding label
+            this._lodingLable = new objects.Label("Loading", "25px Satisfy", "#ff751a", config.Screen.CENTER_X, config.Screen.CENTER_Y + 130);
+            this.addChild(this._lodingLable);
             Loading._flag = true;
         };
         return Loading;

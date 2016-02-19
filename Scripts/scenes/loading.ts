@@ -5,6 +5,7 @@ module scenes {
         private _mainBG: createjs.Bitmap;
         private _preloader: createjs.Bitmap;
         private _lodingLable: objects.Label;
+        private _loadingBG:createjs.Bitmap;
 
         private _queue: createjs.LoadQueue;
         private static _flag: boolean;
@@ -18,6 +19,8 @@ module scenes {
         // Start Method
         public start(): void {
             Loading._flag = false;
+            
+            
               
             //this part require a preload
             this._queue = new createjs.LoadQueue();
@@ -25,17 +28,10 @@ module scenes {
             this._queue.loadManifest([
                 { id: "PreloaderImage", src: "../../Assets/images/preloader.png" },
                 { id: "MainBG", src: "../../Assets/images/loading.jpg" },
+                { id: "loadingBG", src: "../../Assets/images/loadingBG-fixed.jpg" },
             ]);
             this._queue.on("complete", this.addBitMaps, this);
 
-                   
-            //adding label
-            this._lodingLable = new objects.Label("Loading",
-                "25px Arial",
-                "#ff751a",
-                config.Screen.CENTER_X,
-                config.Screen.CENTER_Y + 130);
-            this.addChild(this._lodingLable);
             
             
             // add this scene to the global stage container
@@ -53,6 +49,9 @@ module scenes {
 
         public addBitMaps(): void {
             //add background
+            this._loadingBG = new createjs.Bitmap(this._queue.getResult("loadingBG"));            
+            this.addChild(this._loadingBG);
+            
             this._mainBG = new createjs.Bitmap(this._queue.getResult("MainBG"));
             
             //i tried to get height and width of a bitmap            
@@ -62,7 +61,7 @@ module scenes {
             this._mainBG.x = config.Screen.CENTER_X;
             this._mainBG.y = config.Screen.CENTER_Y - 150;
             this.addChild(this._mainBG);
-            
+
             this._preloader = new createjs.Bitmap(this._queue.getResult("PreloaderImage"));
             //i tried to get height and width of a bitmap            
             this._preloader.regX = this._preloader.getBounds().width * 0.5;
@@ -71,6 +70,15 @@ module scenes {
             this._preloader.x = config.Screen.CENTER_X;
             this._preloader.y = config.Screen.CENTER_Y + 50;
             this.addChild(this._preloader);
+            
+            //adding label
+            this._lodingLable = new objects.Label("Loading",
+                "25px Satisfy",
+                "#ff751a",
+                config.Screen.CENTER_X,
+                config.Screen.CENTER_Y + 130);
+            this.addChild(this._lodingLable);
+            
             Loading._flag = true;
         }
         

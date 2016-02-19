@@ -222,7 +222,7 @@ module scenes {
             // add the Player Money Label to the scene
             this._playerMoneyLabel = new objects.Label(
                 "$" + this._playerMoney.toFixed(2),
-                "bold 25px Arial",
+                "bold 25px Satisfy",
                 "#976d1b",
                 115,
                 25);
@@ -231,7 +231,7 @@ module scenes {
             // add bet lable to the scene
             this._playerBetLabel = new objects.Label(
                 "$" + this._playerBet,
-                "bold 25px Arial",
+                "bold 25px Satisfy",
                 "#976d1b",
                 215,
                 config.Screen.CENTER_Y + 203);
@@ -240,16 +240,16 @@ module scenes {
             // add jackpot lable to the scene
             this._jackpotLabel = new objects.Label(
                 "$" + this._jackpot,
-                "bold 25px Arial",
+                "bold 25px Satisfy",
                 "#ff3333",
                 config.Screen.CENTER_X,
-                config.Screen.CENTER_Y - 250);
+                config.Screen.CENTER_Y - 253);
             this.addChild(this._jackpotLabel);
 
             // add winning Money lable to the scene
             this._winningsLabel = new objects.Label(
                 "$" + this._winnings,
-                "bold 25px Arial",
+                "bold 25px Satisfy",
                 "#976d1b",
                 config.Screen.CENTER_X - 40,
                 config.Screen.CENTER_Y + 203);
@@ -365,15 +365,15 @@ module scenes {
             this.checkJackPot();
         }
         public showLossMessage(): void {
-            
+            this.playLoseSound();
             swal({
-                    title: "Not Cool",
-                    text: "You Lose Your $" + (this._winnings*-1) + " Bet !",
-                    type: "error",
-                    confirmButtonText: "K Then !",
-                    allowOutsideClick: true
-                });
-            
+                title: "Not Cool",
+                text: "You Lose Your $" + (this._winnings * -1) + " Bet !",
+                type: "error",
+                confirmButtonText: "K Then !",
+                allowOutsideClick: true
+            });
+
             this._winningsLabel.text = "$" + this._winnings;
             this._playerMoney -= this._playerBet;
             this._playerMoneyLabel.text = "$" + this._playerMoney;
@@ -458,6 +458,8 @@ module scenes {
                     //this will start the animation
                     //after the animation, the result will be affected
                     SlotMachine._counter = 0;
+                    //play spin sound
+                    this.playSpinSound();
                 }
             } else if (this._playerMoney == 0) {
                 //Reset the game
@@ -488,11 +490,10 @@ module scenes {
         public afterAnimation(): void {
             console.log("Spinnn !")
 
-            //play spin sound
-            this.playSpinSound();
+
 
             this._spinResult = this.Reels();
-            console.log(this._spinResult);
+            //console.log(this._spinResult);
             this.determineWinnings();
 
             //add the 3 new images based on result
@@ -627,10 +628,10 @@ module scenes {
             this._playerBetLabel.text = "$" + this._playerBet;
         }
 
-        public _exitButtonClick(): void {
-            createjs.Sound.stop();
+        public _exitButtonClick(): void {            
             scene = config.Scene.GAME_OVER;
             changeScene();
+
         }
 
         public _resetButtonClick(): void {
@@ -646,6 +647,7 @@ module scenes {
 
         public playBMG(): void {
             var BMG = createjs.Sound.play("BMG");
+            BMG.pan = 0;
         }
 
         public playNormalWinSound(): void {
@@ -655,6 +657,12 @@ module scenes {
         public playSpinSound(): void {
             var spin = createjs.Sound.play("Spin");
         }
+
+        public playLoseSound(): void {
+            var lose = createjs.Sound.play("Lose");
+            lose.setVolume(0.5);
+        }
+        
         
         //shuffle images
         public shuffleImages(): void {
