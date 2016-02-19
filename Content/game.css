@@ -16,6 +16,7 @@ body {
     background-repeat: no-repeat;
     background-position:center;    
     background-attachment:fixed;
+    background-color: #090f0f;
 }
 
 canvas {     
