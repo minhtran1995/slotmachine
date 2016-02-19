@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Source file name : slotmachine.ts                                           *
+ * Author's name : Duc Minh Tran (300771859)                                   *
+ * Last Modified by : Duc Minh Tran (300771859)                                *
+ * Last Modified date : Feb 2016                                               *
+ * Program description : This web game, by using create js, is kind of         *
+ *                     simulation of a slot machine. User can spin the Reels   *
+ *                     and enjoy the fun of it                                 *
+ * Revision History : 1                                                        *
+ *******************************************************************************
+*/
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -138,7 +150,6 @@ var scenes;
             if (SlotMachine._counter < 300) {
                 this.shuffleImages();
                 SlotMachine._counter++;
-                console.log(SlotMachine._counter);
             }
             if (SlotMachine._counter == 300) {
                 this.afterAnimation();

@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Source file name : game.ts                                                  *
+ * Author's name : Duc Minh Tran (300771859)                                   *
+ * Last Modified by : Duc Minh Tran (300771859)                                *
+ * Last Modified date : Feb 2016                                               *
+ * Program description : This web game, by using create js, is kind of         *
+ *                     simulation of a slot machine. User can spin the Reels   *
+ *                     and enjoy the fun of it                                 *
+ * Revision History : 1                                                        *
+ *******************************************************************************
+*/
 /// <reference path = "_reference.ts" />
 // global variables
 var assets;
