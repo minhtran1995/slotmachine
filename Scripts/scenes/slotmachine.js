@@ -148,6 +148,8 @@ var scenes;
             //shufflein 5 secconds
             //60FPS 
             if (SlotMachine._counter < 350) {
+                //disable the spin button
+                this._spinButton.mouseEnabled = false;
                 if (SlotMachine._counter < 120) {
                     this.shuffleFirstImage();
                     this.shuffleSecondImage();
@@ -187,6 +189,8 @@ var scenes;
             if (SlotMachine._counter == 350) {
                 this.afterAnimation();
                 SlotMachine._counter = 1000;
+                //enable spin button for the next spin                
+                this._spinButton.mouseEnabled = true;
             }
         };
         //EVENT HANDLERS ++++++++++++++++++++
