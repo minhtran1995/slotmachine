@@ -7,7 +7,7 @@
  * Program description : This web game, by using create js, is kind of         *
  *                     simulation of a slot machine. User can spin the Reels   *
  *                     and enjoy the fun of it                                 *
- * Revision History : 1                                                        *
+ * Revision History : 2                                                        *
  *******************************************************************************
 */
 

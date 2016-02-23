@@ -7,7 +7,7 @@
  * Program description : This web game, by using create js, is kind of         *
  *                     simulation of a slot machine. User can spin the Reels   *
  *                     and enjoy the fun of it                                 *
- * Revision History : 1                                                        *
+ * Revision History : 2                                                        *
  *******************************************************************************
 */
 var __extends = (this && this.__extends) || function (d, b) {
@@ -147,11 +147,44 @@ var scenes;
         SlotMachine.prototype.update = function () {
             //shufflein 5 secconds
             //60FPS 
-            if (SlotMachine._counter < 300) {
-                this.shuffleImages();
+            if (SlotMachine._counter < 350) {
+                if (SlotMachine._counter < 120) {
+                    this.shuffleFirstImage();
+                    this.shuffleSecondImage();
+                    this.shuffleThirdImage();
+                }
+                else if (SlotMachine._counter == 120) {
+                    this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
+                    this._firstWindow.x = this._w1x;
+                    this._firstWindow.y = this._w1y;
+                    this.addChild(this._firstWindow);
+                    createjs.Sound.play("Ping");
+                }
+                else if (SlotMachine._counter < 220) {
+                    this.shuffleSecondImage();
+                    this.shuffleThirdImage();
+                }
+                else if (SlotMachine._counter == 220) {
+                    this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
+                    this._secondWindow.x = this._w2x;
+                    this._secondWindow.y = this._w2y;
+                    this.addChild(this._secondWindow);
+                    createjs.Sound.play("Ping");
+                }
+                else if (SlotMachine._counter < 299) {
+                    this.shuffleThirdImage();
+                }
+                else if (SlotMachine._counter == 299) {
+                    this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
+                    this._thirdWindow.x = this._w3x;
+                    this._thirdWindow.y = this._w3y;
+                    this.addChild(this._thirdWindow);
+                    createjs.Sound.play("Ping");
+                }
                 SlotMachine._counter++;
             }
-            if (SlotMachine._counter == 300) {
+            //++++++ After a bit delay, show the message
+            if (SlotMachine._counter == 350) {
                 this.afterAnimation();
                 SlotMachine._counter = 1000;
             }
@@ -287,6 +320,7 @@ var scenes;
             this.removeChild(this._firstWindow);
             this.removeChild(this._secondWindow);
             this.removeChild(this._thirdWindow);
+            console.log("Spinnn !");
             //Initially, there is no money, so player should not be able to spin the Reels
             if (this._playerMoney > 0) {
                 if (this._playerBet == 0) {
@@ -315,6 +349,8 @@ var scenes;
                     SlotMachine._counter = 0;
                     //play spin sound
                     this.playSpinSound();
+                    //determine result now, then show animation
+                    this.beforeAnimation();
                     //clear previous wining money
                     this._winnings = 0;
                     this._winningsLabel.text = "$" + this._winnings;
@@ -343,11 +379,13 @@ var scenes;
                 });
             }
         };
-        SlotMachine.prototype.afterAnimation = function () {
-            console.log("Spinnn !");
+        SlotMachine.prototype.beforeAnimation = function () {
+            //i try to collect the spin result before do the animation
             this._spinResult = this.Reels();
-            //console.log(this._spinResult);
+        };
+        SlotMachine.prototype.afterAnimation = function () {
             this.determineWinnings();
+            /*
             //add the 3 new images based on result
             this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
             this._firstWindow.x = this._w1x;
@@ -360,7 +398,7 @@ var scenes;
             this._thirdWindow.y = this._w3y;
             this.addChild(this._firstWindow);
             this.addChild(this._secondWindow);
-            this.addChild(this._thirdWindow);
+            this.addChild(this._thirdWindow);*/
         };
         /* Utility function to check if a value falls within a range of bounds */
         SlotMachine.prototype.checkRange = function (value, lowerBounds, upperBounds) {
@@ -496,21 +534,25 @@ var scenes;
             lose.setVolume(0.5);
         };
         //shuffle images
-        SlotMachine.prototype.shuffleImages = function () {
+        SlotMachine.prototype.shuffleFirstImage = function () {
             this.removeChild(this._firstWindow);
-            this.removeChild(this._secondWindow);
-            this.removeChild(this._thirdWindow);
             this._firstWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
             this._firstWindow.x = this._w1x;
             this._firstWindow.y = this._w1y;
+            this.addChild(this._firstWindow);
+        };
+        SlotMachine.prototype.shuffleSecondImage = function () {
+            this.removeChild(this._secondWindow);
             this._secondWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
             this._secondWindow.x = this._w2x;
             this._secondWindow.y = this._w2y;
+            this.addChild(this._secondWindow);
+        };
+        SlotMachine.prototype.shuffleThirdImage = function () {
+            this.removeChild(this._thirdWindow);
             this._thirdWindow = new createjs.Bitmap(assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
             this._thirdWindow.x = this._w3x;
             this._thirdWindow.y = this._w3y;
-            this.addChild(this._firstWindow);
-            this.addChild(this._secondWindow);
             this.addChild(this._thirdWindow);
         };
         return SlotMachine;

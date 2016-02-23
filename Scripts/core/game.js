@@ -7,7 +7,7 @@
  * Program description : This web game, by using create js, is kind of         *
  *                     simulation of a slot machine. User can spin the Reels   *
  *                     and enjoy the fun of it                                 *
- * Revision History : 1                                                        *
+ * Revision History : 2                                                        *
  *******************************************************************************
 */
 /// <reference path = "_reference.ts" />
@@ -61,6 +61,7 @@ var assetData = [
     { id: "NormalWin", src: "../../Assets/sounds/normalWin.mp3" },
     { id: "Spin", src: "../../Assets/sounds/spin.mp3" },
     { id: "Lose", src: "../../Assets/sounds/lose.mp3" },
+    { id: "Ping", src: "../../Assets/sounds/Ping.mp3" },
 ];
 function preload() {
     scene = config.Scene.MENU;
