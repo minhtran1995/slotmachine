@@ -65,7 +65,7 @@ var assetData: objects.Asset[] = [
 
     //sound
     { id: "InsertCoin", src: "../../Assets/sounds/InsertCoins.mp3" },
-    { id: "BMG", src: "../../Assets/sounds/Feeling Happy ' Stay See Summer Mix 2015.mp3" },
+    { id: "BMG", src: "../../Assets/sounds/BMG.mp3" },
     { id: "JackpotSound", src: "../../Assets/sounds/jackpot.mp3" },
     { id: "NormalWin", src: "../../Assets/sounds/normalWin.mp3" },
     { id: "Spin", src: "../../Assets/sounds/spin.mp3" },

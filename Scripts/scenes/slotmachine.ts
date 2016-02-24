@@ -726,7 +726,7 @@ module scenes {
 
         public playLoseSound(): void {
             var lose = createjs.Sound.play("Lose");
-            lose.setVolume(0.5);
+            lose.setVolume(1);
         }
         
         

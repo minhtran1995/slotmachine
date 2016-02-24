@@ -148,7 +148,7 @@ var scenes;
             //shufflein 5 secconds
             //60FPS 
             if (SlotMachine._counter < 350) {
-                //disable the spin button
+                //disable the spin button                
                 this._spinButton.mouseEnabled = false;
                 if (SlotMachine._counter < 120) {
                     this.shuffleFirstImage();
@@ -535,7 +535,7 @@ var scenes;
         };
         SlotMachine.prototype.playLoseSound = function () {
             var lose = createjs.Sound.play("Lose");
-            lose.setVolume(0.5);
+            lose.setVolume(1);
         };
         //shuffle images
         SlotMachine.prototype.shuffleFirstImage = function () {
