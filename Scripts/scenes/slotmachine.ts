@@ -297,7 +297,7 @@ module scenes {
             if (SlotMachine._counter < 350) {
                 //disable the spin button                
                 this._spinButton.mouseEnabled = false;
-                
+
                 if (SlotMachine._counter < 120) {
                     this.shuffleFirstImage(); this.shuffleSecondImage(); this.shuffleThirdImage();
                 }
@@ -480,9 +480,7 @@ module scenes {
 
         public _spinButtonClick(): void {
 
-            this.removeChild(this._firstWindow);
-            this.removeChild(this._secondWindow);
-            this.removeChild(this._thirdWindow);
+
             console.log("Spinnn !")
             //Initially, there is no money, so player should not be able to spin the Reels
             if (this._playerMoney > 0) {
@@ -509,6 +507,9 @@ module scenes {
                         confirmButtonText: "Okay !"
                     });
                 } else if (this._playerBet <= this._playerMoney) {
+                    this.removeChild(this._firstWindow);
+                    this.removeChild(this._secondWindow);
+                    this.removeChild(this._thirdWindow);
                     //this will start the animation
                     //after the animation, the result will be affected
                     SlotMachine._counter = 0;
