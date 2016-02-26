@@ -32,8 +32,8 @@ module scenes {
             GameOver._flag = 1;
                 
             //add BG
-            this._overBG = new createjs.Bitmap(assets.getResult("OverBG"));
-            this.addChild(this._overBG);
+            this._setupBackground("OverBG");
+            this._fadeIn(500);
             
             // add the gameOver Label to the MENU scene
             this._gameOverLabel = new objects.Label(

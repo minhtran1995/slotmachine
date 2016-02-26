@@ -27,9 +27,12 @@ var scenes;
         // PUBLIC METHODS +++++++++++++++++++++
         // Start Method
         Menu.prototype.start = function () {
+            // Setup Background
+            this._setupBackground("menuBG");
+            this._fadeIn(1000);
             //add BG
-            this._menuBG = new createjs.Bitmap(assets.getResult("menuBG"));
-            this.addChild(this._menuBG);
+            //this._menuBG = new createjs.Bitmap(assets.getResult("menuBG"));
+            //this.addChild(this._menuBG);
             // add the WELCOME Label to the MENU scene
             this._welcomeLabel = new objects.Label(".:Michael Slot Machine:.", "60px Satisfy", "#e4d66b", config.Screen.CENTER_X, 50);
             this.addChild(this._welcomeLabel);
@@ -57,9 +60,11 @@ var scenes;
         //EVENT HANDLERS ++++++++++++++++++++
         // START Button click event handler
         Menu.prototype._startButtonClick = function (event) {
-            // Switch to the mainGame Scene
-            scene = config.Scene.SLOT_MACHINE;
-            changeScene();
+            this._fadeOut(500, function () {
+                // Switch to the mainGame Scene
+                scene = config.Scene.SLOT_MACHINE;
+                changeScene();
+            });
         };
         return Menu;
     })(objects.Scene);

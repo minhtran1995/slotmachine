@@ -105,8 +105,11 @@ module scenes {
             this._jackpot = 5000;
 
             //add background
-            this._mainBG = new createjs.Bitmap(assets.getResult("mainBG"));
-            this.addChild(this._mainBG);
+            
+            this._setupBackground("mainBG");
+            this._fadeIn(500);
+            
+            
 
             //add spin button
             this._spinButton = new objects.Button(
@@ -272,19 +275,22 @@ module scenes {
             // add this scene to the global stage container
             stage.addChild(this);
 
-            //Cheat
-            shortcut.add("Ctrl+J", function() {
-                swal({
-                    title: "Nice !",
-                    text: "You Have Enabled The Cheat Mode\nYou Will Always Win  \nJackpot Will Come Everytime You Win",
-                    type: "success",
-                    confirmButtonText: "K Then !"
-                });
-                SlotMachine.cheat = true;
-                console.log(SlotMachine.cheat);
-            });
+            //Cheat           
 
-
+            var ctrlKeyHold = false;
+            
+            //make sure only ctrl + J works 
+            document.onkeyup = function(e) {
+                if (e.which == 17) ctrlKeyHold = false;
+            }
+            document.onkeydown = function(e) {
+                if (e.which == 17) ctrlKeyHold = true;
+                if (e.which == 74 && ctrlKeyHold == true) {
+                    SlotMachine.cheat = true;
+                    alert('Cheatmode Enabled! \nThere will be no losing\nJackpot comes everytime');
+                    return false;
+                }
+            }
 
         }
 
@@ -299,24 +305,21 @@ module scenes {
                 this._spinButton.mouseEnabled = false;
 
                 if (SlotMachine._counter < 120) {
-                    this.shuffleFirstImage(); this.shuffleSecondImage(); this.shuffleThirdImage();
+                    this.shuffleFirstImage(); 
+                    this.shuffleSecondImage();
+                    this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 120) {
-                    this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
-                    this._firstWindow.x = this._w1x;
-                    this._firstWindow.y = this._w1y;
-                    this.addChild(this._firstWindow);
+                    this._firstWindow.image = assets.getResult(this._spinResult[0]);                    
                     createjs.Sound.play("Ping");
 
                 }
                 else if (SlotMachine._counter < 220) {
-                    this.shuffleSecondImage(); this.shuffleThirdImage();
+                    this.shuffleSecondImage();
+                    this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 220) {
-                    this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
-                    this._secondWindow.x = this._w2x;
-                    this._secondWindow.y = this._w2y;
-                    this.addChild(this._secondWindow);
+                    this._secondWindow.image = assets.getResult(this._spinResult[1]);                    
                     createjs.Sound.play("Ping");
 
                 }
@@ -324,10 +327,7 @@ module scenes {
                     this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 299) {
-                    this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
-                    this._thirdWindow.x = this._w3x;
-                    this._thirdWindow.y = this._w3y;
-                    this.addChild(this._thirdWindow);
+                    this._thirdWindow.image = assets.getResult(this._spinResult[2]); 
                     createjs.Sound.play("Ping");
                 }
 
@@ -388,13 +388,7 @@ module scenes {
                 //play BMG right back
                 jackpotSound.on("complete", this.playBMG, this);
 
-
-                swal({
-                    title: "Nice",
-                    text: "You Won the $" + this._jackpot + " Jackpot!!",
-                    type: "success",
-                    confirmButtonText: "K Then !"
-                });
+                alert("You Won the $" + this._jackpot + " Jackpot!!")
 
                 this._playerMoney += this._jackpot;
                 this._playerMoneyLabel.text = "$" + this._playerMoney;
@@ -406,13 +400,7 @@ module scenes {
             this.playNormalWinSound();
             this._winningsLabel.text = "$" + this._winnings;
 
-            swal({
-                title: "Nice",
-                text: "You Won $" + this._winnings,
-                type: "success",
-                confirmButtonText: "K Then !",
-                allowOutsideClick: true
-            });
+            alert("You Won $" + this._winnings)
             this._playerMoney += this._winnings;
             this._playerMoneyLabel.text = "$" + this._playerMoney;
             this.resetFruitTally();
@@ -420,13 +408,9 @@ module scenes {
         }
         public showLossMessage(): void {
             this.playLoseSound();
-            swal({
-                title: "Not Cool",
-                text: "You Lose Your $" + (this._winnings * -1) + " Bet !",
-                type: "error",
-                confirmButtonText: "K Then !",
-                allowOutsideClick: true
-            });
+
+
+            alert("You Lose Your $" + (this._winnings * -1) + " Bet !");
 
             this._winningsLabel.text = "$" + this._winnings;
             this._playerMoney -= this._playerBet;
@@ -491,25 +475,13 @@ module scenes {
                     //it will simply display a Better alert Box
                     /// <reference path="../lib/sweetalert.min.js" />
 
-
-                    swal({
-                        title: "Error!",
-                        text: "You Should Add Some Bets To Spin The Reels !",
-                        type: "error",
-                        confirmButtonText: "K Then !"
-                    });
+                    alert("You Should Add Some Bets To Spin The Reels !")
                 } else if (this._playerBet > this._playerMoney) {
 
-                    swal({
-                        title: "Error!",
-                        text: "You Dont Have Enough Money To Place That Bet !",
-                        type: "error",
-                        confirmButtonText: "Okay !"
-                    });
+
+                    alert("You Dont Have Enough Money To Place That Bet !")
                 } else if (this._playerBet <= this._playerMoney) {
-                    this.removeChild(this._firstWindow);
-                    this.removeChild(this._secondWindow);
-                    this.removeChild(this._thirdWindow);
+                    
                     //this will start the animation
                     //after the animation, the result will be affected
                     SlotMachine._counter = 0;
@@ -526,25 +498,16 @@ module scenes {
             } else if (this._playerMoney == 0) {
                 //Reset the game
 
-                swal({
-                    title: "You Are Broke !",
-                    text: "Do You Want To Play The Game Again",
-                    type: "info",
-                    confirmButtonText: "Play Again",
-                    showCancelButton: true,
-                    showConfirmButton: true
-                },
-                    //This function is called onConfirmButton Click
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            console.log("Play Again !");
-                            scene = config.Scene.SLOT_MACHINE;
-                            changeScene();
+               
+                if (confirm("You ran out of Money! \nDo you want to play again?")) {
+                    console.log("Play Again !");
+                    scene = config.Scene.SLOT_MACHINE;
+                    changeScene();
+                }
+                else {
+                    console.log("Nothing !");
+                }
 
-                        } else {
-                            console.log("Do nothing !")
-                        }
-                    });
             }
 
         }
@@ -696,8 +659,12 @@ module scenes {
         }
 
         public _exitButtonClick(): void {
+            //window.open('', '_self', '');
+            //window.close();
+            this._fadeOut(500, () => {
             scene = config.Scene.GAME_OVER;
             changeScene();
+            });
 
         }
 
@@ -733,31 +700,16 @@ module scenes {
         
         //shuffle images
         public shuffleFirstImage(): void {
-            this.removeChild(this._firstWindow);
-            this._firstWindow = new createjs.Bitmap(
-                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
-            this._firstWindow.x = this._w1x;
-            this._firstWindow.y = this._w1y;
-            this.addChild(this._firstWindow);
+            this._firstWindow.image = assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]);
 
         }
 
         public shuffleSecondImage(): void {
-            this.removeChild(this._secondWindow);
-            this._secondWindow = new createjs.Bitmap(
-                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
-            this._secondWindow.x = this._w2x;
-            this._secondWindow.y = this._w2y;
-            this.addChild(this._secondWindow);
+            this._secondWindow.image = assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]);
         }
 
         public shuffleThirdImage(): void {
-            this.removeChild(this._thirdWindow);
-            this._thirdWindow = new createjs.Bitmap(
-                assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]));
-            this._thirdWindow.x = this._w3x;
-            this._thirdWindow.y = this._w3y;
-            this.addChild(this._thirdWindow);
+            this._thirdWindow.image = assets.getResult(this._fruits[Math.floor((Math.random() * 7) + 1)]);
         }
 
     }

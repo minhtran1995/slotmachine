@@ -62,6 +62,7 @@ module scenes {
 
         public addBitMaps(): void {
             //add background
+            
             this._loadingBG = new createjs.Bitmap(this._queue.getResult("loadingBG"));            
             this.addChild(this._loadingBG);
             

@@ -17,8 +17,8 @@ module scenes {
         //PRIVATE INSTANCE VARIABLES ++++++++++++
         private _startButton: objects.Button;
         private _welcomeLabel: objects.Label;
-        private _tutorialLabel:objects.Label;
-        private _menuBG:createjs.Bitmap;
+        private _tutorialLabel: objects.Label;
+        private _menuBG: createjs.Bitmap;
         
         // CONSTRUCTOR ++++++++++++++++++++++
         constructor() {
@@ -29,9 +29,14 @@ module scenes {
         
         // Start Method
         public start(): void {
+            
+            // Setup Background
+            this._setupBackground("menuBG");
+            this._fadeIn(1000);
+            
             //add BG
-            this._menuBG = new createjs.Bitmap(assets.getResult("menuBG"));
-            this.addChild(this._menuBG);
+            //this._menuBG = new createjs.Bitmap(assets.getResult("menuBG"));
+            //this.addChild(this._menuBG);
             
             // add the WELCOME Label to the MENU scene
             this._welcomeLabel = new objects.Label(
@@ -42,20 +47,20 @@ module scenes {
                 50);
             this.addChild(this._welcomeLabel);
             
-             // add the WELCOME Label to the MENU scene
+            // add the WELCOME Label to the MENU scene
             this._tutorialLabel = new objects.Label(
-                "**Press F11 to switch to Full-Screen mode**"+
-                "\nThis is a simple slotmachine made by me. In order to start the machine,"+
-                "\nyou will need to bet some money first, and then press the spin button"+
-                "\nThe machine will operate and give you the result after 5 seconds."+
-                "\nIt will also determine if you win or lose the bet. If you are lucky enough,"+
-                "\nyou will have a chance of getting the $5000 Jackpot. "+
-                "\nThat is enough of talking ! Let's roll guys"+
+                "**Press F11 to switch to Full-Screen mode**" +
+                "\nThis is a simple slotmachine made by me. In order to start the machine," +
+                "\nyou will need to bet some money first, and then press the spin button" +
+                "\nThe machine will operate and give you the result after 5 seconds." +
+                "\nIt will also determine if you win or lose the bet. If you are lucky enough," +
+                "\nyou will have a chance of getting the $5000 Jackpot. " +
+                "\nThat is enough of talking ! Let's roll guys" +
                 "\n\n\n**Press Ctrl+J after starting the game to see the magic :)",
                 "25px Asap",
                 "#e4d66b",
                 config.Screen.CENTER_X,
-                config.Screen.CENTER_Y-90);
+                config.Screen.CENTER_Y - 90);
             this.addChild(this._tutorialLabel);
                    
             // add the START button to the MENU scene
@@ -71,6 +76,7 @@ module scenes {
             this._startButton.on("click", this._startButtonClick, this);
            
             
+            
             // add this scene to the global stage container
             stage.addChild(this);
         }
@@ -85,9 +91,12 @@ module scenes {
         
         // START Button click event handler
         private _startButtonClick(event: createjs.MouseEvent) {
-            // Switch to the mainGame Scene
-            scene = config.Scene.SLOT_MACHINE;
-            changeScene();
+
+            this._fadeOut(500, () => {
+                // Switch to the mainGame Scene
+                scene = config.Scene.SLOT_MACHINE;
+                changeScene();
+            });
         }
 
     }
