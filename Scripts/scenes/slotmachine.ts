@@ -7,7 +7,9 @@
  * Program description : This web game, by using create js, is kind of         *
  *                     simulation of a slot machine. User can spin the Reels   *
  *                     and enjoy the fun of it                                 *
- * Revision History : 2                                                        *
+ * Revision History : 2.1                                                      *
+ * References:                                                                 *
+ * 1.)http://www.catswhocode.com/blog/using-keyboard-shortcuts-in-javascript   *
  *******************************************************************************
 */
 
@@ -275,7 +277,12 @@ module scenes {
             // add this scene to the global stage container
             stage.addChild(this);
 
-            //Cheat           
+
+
+            //Cheatmode    
+            
+            //This Section is copied from http://www.catswhocode.com/blog/using-keyboard-shortcuts-in-javascript
+            //I have been doing some modifications to full-fill my goal of this project       
 
             var ctrlKeyHold = false;
             
@@ -284,13 +291,14 @@ module scenes {
                 if (e.which == 17) ctrlKeyHold = false;
             }
             document.onkeydown = function(e) {
-                if (e.which == 17) ctrlKeyHold = true;
-                if (e.which == 74 && ctrlKeyHold == true) {
+                if (e.which == 17) ctrlKeyHold = true;  //code:17 = ctrl down
+                if (e.which == 74 && ctrlKeyHold == true) { //code:74 = button J down
                     SlotMachine.cheat = true;
                     alert('Cheatmode Enabled! \nThere will be no losing\nJackpot comes everytime');
                     return false;
                 }
             }
+            //End
 
         }
 

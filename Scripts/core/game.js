@@ -36,7 +36,6 @@ var assetData = [
     { id: "OverBG", src: "../../Assets/images/GameOver-fixed.jpg" },
     { id: "ResetButton", src: "../../Assets/images/ResetButton.png" },
     { id: "StartOverButton", src: "../../Assets/images/StartOverButton.png" },
-    { id: "allBlack", src: "../../Assets/images/allBlack.jpg" },
     //bet buttons
     { id: "PlusButton", src: "../../Assets/images/addBet.jpg" },
     { id: "MinusButton", src: "../../Assets/images/minusBet.jpg" },
@@ -141,4 +140,6 @@ function changeScene() {
     }
     console.log(currentScene.numChildren);
 }
+//make sure to call this outside
+window.onload = init;
 //# sourceMappingURL=game.js.map

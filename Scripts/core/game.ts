@@ -38,11 +38,11 @@ var assetData: objects.Asset[] = [
     { id: "ExitButton", src: "../../Assets/images/QuitButton.png" },
     { id: "QuitButton", src: "../../Assets/images/QuitButton.png" },
     { id: "mainBG", src: "../../Assets/images/slotmachine-fixed.png" },
-    { id: "menuBG", src: "../../Assets/images/menuBG-fixed.jpg"},
-    { id: "OverBG", src: "../../Assets/images/GameOver-fixed.jpg"},
+    { id: "menuBG", src: "../../Assets/images/menuBG-fixed.jpg" },
+    { id: "OverBG", src: "../../Assets/images/GameOver-fixed.jpg" },
     { id: "ResetButton", src: "../../Assets/images/ResetButton.png" },
-    { id: "StartOverButton", src: "../../Assets/images/StartOverButton.png"},
-    { id: "allBlack", src: "../../Assets/images/allBlack.jpg"},
+    { id: "StartOverButton", src: "../../Assets/images/StartOverButton.png" },
+    
     
     
     //bet buttons
@@ -71,8 +71,8 @@ var assetData: objects.Asset[] = [
     { id: "JackpotSound", src: "../../Assets/sounds/jackpot.mp3" },
     { id: "NormalWin", src: "../../Assets/sounds/normalWin.mp3" },
     { id: "Spin", src: "../../Assets/sounds/spin.mp3" },
-    { id: "Lose", src: "../../Assets/sounds/lose.mp3"},
-    { id: "Ping", src: "../../Assets/sounds/Ping.mp3"},
+    { id: "Lose", src: "../../Assets/sounds/lose.mp3" },
+    { id: "Ping", src: "../../Assets/sounds/Ping.mp3" },
 ];
 
 function preload() {
@@ -166,6 +166,9 @@ function changeScene(): void {
             console.log("Starting GAME_OVER Scene");
             break;
     }
-
     console.log(currentScene.numChildren);
 }
+
+
+//make sure to call this outside
+window.onload = init;
