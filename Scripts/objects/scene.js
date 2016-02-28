@@ -27,12 +27,22 @@ var objects;
         };
         // FadeIn method
         Scene.prototype._fadeOut = function (transitionTime, callback) {
-            createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            if (callback == null) {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2));
+            }
+            else {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            }
         };
         // FadeIn method
         Scene.prototype._fadeIn = function (transitionTime, callback) {
             this._blackBackground.alpha = 0;
-            createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            if (callback == null) {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2));
+            }
+            else {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            }
         };
         return Scene;
     })(createjs.Container);

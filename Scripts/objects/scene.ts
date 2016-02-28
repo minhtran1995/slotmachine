@@ -28,14 +28,22 @@ module objects {
         
         
         // FadeIn method
-        protected _fadeOut(transitionTime: number, callback?: any): void {            
-            createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+        protected _fadeOut(transitionTime: number, callback?: any): void {
+            if (callback == null) {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2));
+            }else{
+                createjs.Tween.get(this._blackBackground).to({ alpha: 0 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            }
         }
         
         // FadeIn method
         protected _fadeIn(transitionTime: number, callback?: any): void {
             this._blackBackground.alpha = 0;
-            createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            if (callback == null) {
+                createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2));
+            }else{
+                createjs.Tween.get(this._blackBackground).to({ alpha: 1 }, transitionTime, createjs.Ease.getPowInOut(2)).call(callback);
+            }
         }
     }
 }
