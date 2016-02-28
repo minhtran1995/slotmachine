@@ -222,19 +222,7 @@ module scenes {
 
 
 
-            //add the 3 images
-            this._firstWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._firstWindow.x = this._w1x;
-            this._firstWindow.y = this._w1y;
-            this._secondWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._secondWindow.x = this._w2x;
-            this._secondWindow.y = this._w2y;
-            this._thirdWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._thirdWindow.x = this._w3x;
-            this._thirdWindow.y = this._w3y;
-            this.addChild(this._firstWindow);
-            this.addChild(this._secondWindow);
-            this.addChild(this._thirdWindow);
+            
 
 
             // add the Player Money Label to the scene
@@ -313,12 +301,12 @@ module scenes {
                 this._spinButton.mouseEnabled = false;
 
                 if (SlotMachine._counter < 120) {
-                    this.shuffleFirstImage(); 
+                    this.shuffleFirstImage();
                     this.shuffleSecondImage();
                     this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 120) {
-                    this._firstWindow.image = assets.getResult(this._spinResult[0]);                    
+                    this._firstWindow.image = assets.getResult(this._spinResult[0]);
                     createjs.Sound.play("Ping");
 
                 }
@@ -327,7 +315,7 @@ module scenes {
                     this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 220) {
-                    this._secondWindow.image = assets.getResult(this._spinResult[1]);                    
+                    this._secondWindow.image = assets.getResult(this._spinResult[1]);
                     createjs.Sound.play("Ping");
 
                 }
@@ -335,7 +323,7 @@ module scenes {
                     this.shuffleThirdImage();
                 }
                 else if (SlotMachine._counter == 299) {
-                    this._thirdWindow.image = assets.getResult(this._spinResult[2]); 
+                    this._thirdWindow.image = assets.getResult(this._spinResult[2]);
                     createjs.Sound.play("Ping");
                 }
 
@@ -489,6 +477,7 @@ module scenes {
 
                     alert("You Dont Have Enough Money To Place That Bet !")
                 } else if (this._playerBet <= this._playerMoney) {
+                    this.addImages();
                     
                     //this will start the animation
                     //after the animation, the result will be affected
@@ -531,22 +520,8 @@ module scenes {
         public afterAnimation(): void {
 
 
-            this.determineWinnings();            
+            this.determineWinnings();
 
-            /*
-            //add the 3 new images based on result
-            this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
-            this._firstWindow.x = this._w1x;
-            this._firstWindow.y = this._w1y;
-            this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
-            this._secondWindow.x = this._w2x;
-            this._secondWindow.y = this._w2y;
-            this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
-            this._thirdWindow.x = this._w3x;
-            this._thirdWindow.y = this._w3y;
-            this.addChild(this._firstWindow);
-            this.addChild(this._secondWindow);
-            this.addChild(this._thirdWindow);*/
         }
 
 
@@ -670,8 +645,8 @@ module scenes {
             //window.open('', '_self', '');
             //window.close();
             this._fadeOut(500, () => {
-            scene = config.Scene.GAME_OVER;
-            changeScene();
+                scene = config.Scene.GAME_OVER;
+                changeScene();
             });
 
         }
@@ -703,6 +678,26 @@ module scenes {
         public playLoseSound(): void {
             var lose = createjs.Sound.play("Lose");
             lose.setVolume(1);
+        }
+        
+        //add the 3 images
+        public addImages(): void {
+            this.removeChild(this._firstWindow);
+            this.removeChild(this._secondWindow);
+            this.removeChild(this._thirdWindow);
+            
+            this._firstWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         }
         
         

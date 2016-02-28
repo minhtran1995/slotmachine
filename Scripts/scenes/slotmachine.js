@@ -106,19 +106,6 @@ var scenes;
             this._clearBetButton = new objects.Button("ClearBetButton", 515 + 65, 662, 143, 44);
             this._clearBetButton.on("click", this._clearBetButtonClick, this);
             this.addChild(this._clearBetButton);
-            //add the 3 images
-            this._firstWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._firstWindow.x = this._w1x;
-            this._firstWindow.y = this._w1y;
-            this._secondWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._secondWindow.x = this._w2x;
-            this._secondWindow.y = this._w2y;
-            this._thirdWindow = new createjs.Bitmap(assets.getResult("Blank"));
-            this._thirdWindow.x = this._w3x;
-            this._thirdWindow.y = this._w3y;
-            this.addChild(this._firstWindow);
-            this.addChild(this._secondWindow);
-            this.addChild(this._thirdWindow);
             // add the Player Money Label to the scene
             this._playerMoneyLabel = new objects.Label("$" + this._playerMoney.toFixed(2), "bold 25px Satisfy", "#976d1b", 115, 25);
             this.addChild(this._playerMoneyLabel);
@@ -319,6 +306,7 @@ var scenes;
                     alert("You Dont Have Enough Money To Place That Bet !");
                 }
                 else if (this._playerBet <= this._playerMoney) {
+                    this.addImages();
                     //this will start the animation
                     //after the animation, the result will be affected
                     SlotMachine._counter = 0;
@@ -349,20 +337,6 @@ var scenes;
         };
         SlotMachine.prototype.afterAnimation = function () {
             this.determineWinnings();
-            /*
-            //add the 3 new images based on result
-            this._firstWindow = new createjs.Bitmap(assets.getResult(this._spinResult[0]));
-            this._firstWindow.x = this._w1x;
-            this._firstWindow.y = this._w1y;
-            this._secondWindow = new createjs.Bitmap(assets.getResult(this._spinResult[1]));
-            this._secondWindow.x = this._w2x;
-            this._secondWindow.y = this._w2y;
-            this._thirdWindow = new createjs.Bitmap(assets.getResult(this._spinResult[2]));
-            this._thirdWindow.x = this._w3x;
-            this._thirdWindow.y = this._w3y;
-            this.addChild(this._firstWindow);
-            this.addChild(this._secondWindow);
-            this.addChild(this._thirdWindow);*/
         };
         /* Utility function to check if a value falls within a range of bounds */
         SlotMachine.prototype.checkRange = function (value, lowerBounds, upperBounds) {
@@ -500,6 +474,24 @@ var scenes;
         SlotMachine.prototype.playLoseSound = function () {
             var lose = createjs.Sound.play("Lose");
             lose.setVolume(1);
+        };
+        //add the 3 images
+        SlotMachine.prototype.addImages = function () {
+            this.removeChild(this._firstWindow);
+            this.removeChild(this._secondWindow);
+            this.removeChild(this._thirdWindow);
+            this._firstWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._firstWindow.x = this._w1x;
+            this._firstWindow.y = this._w1y;
+            this._secondWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._secondWindow.x = this._w2x;
+            this._secondWindow.y = this._w2y;
+            this._thirdWindow = new createjs.Bitmap(assets.getResult("Blank"));
+            this._thirdWindow.x = this._w3x;
+            this._thirdWindow.y = this._w3y;
+            this.addChild(this._firstWindow);
+            this.addChild(this._secondWindow);
+            this.addChild(this._thirdWindow);
         };
         //shuffle images
         SlotMachine.prototype.shuffleFirstImage = function () {
